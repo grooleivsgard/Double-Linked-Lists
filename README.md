@@ -7,11 +7,12 @@ Oppgaven er levert av følgende studenter:
 
 # Arbeidsfordeling
 
+*(2 pers på gruppe skal gjøre: Oppgave 1, 2, 3, 4, 5, 6, 7, 8. (fjern test av oppgave 9 og 10))*
+
 I oppgaven har vi hatt følgende arbeidsfordeling:
-* [navn] har hatt hovedansvar for oppgave [xx], [xx], og [xx]. 
-* [navn] har hatt hovedansvar for oppgave [xx], [xx], og [xx]. 
-* [navn] har hatt hovedansvar for oppgave [xx] og [xx]. 
-* Vi har i fellesskap løst oppgave [xx]. 
+* Jenny har hatt hovedansvar for oppgave 1, 3, og 5. 
+* Gro har hatt hovedansvar for oppgave 2, 4, og 6. 
+* Vi har i fellesskap løst oppgave 7 og 8. 
 
 # Oppgavebeskrivelse
 

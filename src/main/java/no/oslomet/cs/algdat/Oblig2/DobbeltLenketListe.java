@@ -10,6 +10,35 @@ import java.util.Iterator;
 
 public class DobbeltLenketListe<T> implements Liste<T> {
 
+    //// MAIN TEST //////////////////////////////////////////////////////////////
+    // main-metode til testing av oppgavene må slettes før oppgaven leveres!
+    public static void main(String[] args) {
+
+        //// Oppgave 1 /////////////////////////////////////////////////////////
+        Liste<String> liste = new DobbeltLenketListe<>();
+        System.out.println(liste.antall() +""+ liste.tom());
+        // Utskrift: 0 true
+
+        String[] s = {"Ole",null,"Per","Kari",null};
+        Liste<String> stringListe = new DobbeltLenketListe<>(s);
+        System.out.println(stringListe.antall() +""+ stringListe.tom());
+        // Utskrift: 3 false
+
+        //// Oppgave 2 /////////////////////////////////////////////////////////
+
+        //// Oppgave 3 /////////////////////////////////////////////////////////
+
+        //// Oppgave 4 /////////////////////////////////////////////////////////
+
+        //// Oppgave 5 /////////////////////////////////////////////////////////
+
+        //// Oppgave 6 /////////////////////////////////////////////////////////
+
+        //// Oppgave 7 /////////////////////////////////////////////////////////
+
+        //// Oppgave 8 /////////////////////////////////////////////////////////
+    }
+
     /**
      * Node class
      *
@@ -37,7 +66,20 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     private int endringer;         // antall endringer i listen
 
     public DobbeltLenketListe() {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+        // Oppgave 1
+
+
+
+        /*
+        ●Stoppes en null-tabell? Kastes i så fall en NullPointerException?
+        ●Blir det korrekt hvis parametertabellen inneholder en eller flere null-verdier?
+        ●Blir det korrekt hvis parametertabellen er tom (har lengde 0)?
+        ●Blir det korrekt hvis parametertabellen kun har null-verdier?
+        ●Blir det korrekt hvis parametertabellen har kun én verdi som ikke er null?
+        ●Blir antallet satt korrekt?
+        ●Får verdiene i listen samme rekkefølge som i tabellen?
+         */
     }
 
     public DobbeltLenketListe(T[] a) {
@@ -51,11 +93,14 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     @Override
     public int antall() {
         throw new UnsupportedOperationException();
+        // Oppgave 1
+
     }
 
     @Override
     public boolean tom() {
         throw new UnsupportedOperationException();
+        // Oppgave 1
     }
 
     @Override
