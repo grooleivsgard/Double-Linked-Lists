@@ -67,23 +67,28 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     public DobbeltLenketListe() {
         // throw new UnsupportedOperationException();
+
         // Oppgave 1
+        // deler av kode fra Programkode 3.3.2 c) og d) fra kompendiet
+        // Standardkontruktør
+        hode = hale = null;        // hode og hale til null
 
+        antall = 0;         // tom liste
+        endringer = 0;
 
-
-        /*
-        ●Stoppes en null-tabell? Kastes i så fall en NullPointerException?
-        ●Blir det korrekt hvis parametertabellen inneholder en eller flere null-verdier?
-        ●Blir det korrekt hvis parametertabellen er tom (har lengde 0)?
-        ●Blir det korrekt hvis parametertabellen kun har null-verdier?
-        ●Blir det korrekt hvis parametertabellen har kun én verdi som ikke er null?
-        ●Blir antallet satt korrekt?
-        ●Får verdiene i listen samme rekkefølge som i tabellen?
-         */
     }
 
     public DobbeltLenketListe(T[] a) {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
+        // Oppgave 1
+        // Kontruktør
+        // deler av kode fra Programkode 3.2.2 d) i kompendiet
+        this(a.length);
+
+        for (T verdi : a) {
+            if (verdi != null) a[antall++] = verdi; // hopper over nullverdier
+        }
     }
 
     public Liste<T> subliste(int fra, int til) {
@@ -92,15 +97,28 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public int antall() {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
         // Oppgave 1
 
+        // deler av kode fra Programkode 3.1.2 b) og oppgave 2 til Avsnitt 3.1.1 fra kompendiet
+        int antall = 0;
+        for (T t : this) if (t != null) antall++;
+        // bruker en "for alle"-løkke for å telle antall verdier > 0 i tabellen
+
+        return antall;
     }
 
     @Override
     public boolean tom() {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
         // Oppgave 1
+
+        if (antall() != 0) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -115,7 +133,18 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public boolean inneholder(T verdi) {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
+        // kode fra kompendiet: oppgave 1 til Avsnitt 3.1.2
+        if (verdi == null)  // tillatt med null-verdier?
+        {
+            for (T t : this) if (t == null) return true;
+        }
+        else
+        {
+            for (T t : this) if (verdi.equals(t)) return true;
+        }
+        return false;
     }
 
     @Override
@@ -145,12 +174,37 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public void nullstill() {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
+        // Kode fra kompendiet: oppgave 2 til Avsnitt 3.1.2
+        for (Iterator<T> it = iterator(); it.hasNext(); )
+        {
+            it.next();
+            it.remove();
+        }
     }
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
+        // kode fra kompendiet: oppgave 3 til Avsnitt 3.1.2
+        StringBuilder st = new StringBuilder("[");
+
+        Iterator<T> it = iterator();
+
+        if (it.hasNext()) st.append(it.next());  // første verdi
+
+        while (it.hasNext())
+        {
+            st.append(',');        // komma
+            st.append(' ');        // blank
+            st.append(it.next());   // verdi
+        }
+
+        st.append(']');
+
+        return st.toString();
     }
 
     public String omvendtString() {
