@@ -59,6 +59,19 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     *
+     * Noden blir enten lagt inn i en tom liste (Tilfelle 1),
+     * hvor både hode og hale settes til den nye noden.
+     *
+     * Ellers blir noden lagt inn bakerst i listen (Tilfelle 2), hvor siste node
+     * peker til den nye noden, og halen blir flyttet til siste node.
+     *
+     * Ved begge tilfeller økes både antall og endringer med 1.
+     *
+     * @param verdi - verdi på ny node
+     * @return true - dersom verdi != null.
+     */
     @Override
     public boolean leggInn(T verdi) {
 
