@@ -33,8 +33,8 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     // instansvariabler
     private Node<T> hode;          // peker til den første i listen
     private Node<T> hale;          // peker til den siste i listen
-    private int antall;            // antall noder i listen
-    private int endringer;         // antall endringer i listen
+    private int antall;            // antall noder i listen, skal økes for hver innlegging og reduserer for hver fjerning
+    private int endringer;         // antall endringer i listen, skal økes for hver endring i listen (innlegging, oppdatering, fjerning, nullstill)
 
     public DobbeltLenketListe() {
         throw new UnsupportedOperationException();
@@ -60,6 +60,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public boolean leggInn(T verdi) {
+
         throw new UnsupportedOperationException();
     }
 
@@ -103,13 +104,79 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * ---- toString ---
+     * @return en toString, som inneholder listens verdier, fra hode til hale.
+     * Hvis listen feks inneholder tallene 1, 2, 3,
+     * skal metoden returnere strengen "[1, 2, 3]" og kun "[]" hvis listen er tom.
+     *
+     * Bruker en StringBuilder til å opprette tegnstrengen.
+     *
+     * Traverserer fra hode til hale ved hjelp av neste-pekere.
+     *
+     * Kilde: Kompendiet, kapittel 3.3.2.
+     */
+
     @Override
     public String toString() {
-        throw new UnsupportedOperationException();
+
+        StringBuilder s = new StringBuilder();
+
+        // (1) Setter klammeparantes i starten av String
+        s.append('[');
+
+        // (2) Sjekker om liste er tom, hvis ikke løpes det gjennom ved å flytte neste-peker
+        if(!tom()){
+            Node<T> q = hode;
+            s.append(q.verdi);
+
+            q = q.neste;
+
+            // (3) Frem til siste node (hvor q = null), sett komma mellom verdiene.
+            while(q != null){
+                s.append(',').append(' ').append(q.verdi);
+                q = q.neste;
+            }
+        }
+
+        // (4) Legg på en klammeparantes på slutten av stringen
+        s.append(']');
+
+        return s.toString();
     }
 
+    /**
+     *
+     * @return en toString som inneholder listens verdier i omvendt rekkefølge,
+     * fra hale til hode.
+     *
+     * Bruker en StringBuilder til å opprette tegnstrengen.
+     *
+     * Traverserer fra hale til hode ved hjelp
+     * av forrige-pekere.
+     *
+     * Kilde: Kompendiet, kapittel 3.3.2.
+     */
     public String omvendtString() {
-        throw new UnsupportedOperationException();
+
+        StringBuilder s = new StringBuilder();
+
+        s.append('[');
+
+        if(!tom()){
+            Node<T>r = hale;
+            s.append(hale.verdi);
+
+            r = r.forrige;
+
+            while(r != null){
+                s.append(',').append(' ').append(r.verdi);
+                r = r.forrige;
+            }
+        }
+        s.append(']');
+
+        return s.toString();
     }
 
     @Override
