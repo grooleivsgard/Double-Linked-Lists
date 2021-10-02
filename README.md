@@ -1,18 +1,18 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-f059dc9a6f8d3a56e377f745f24479a46679e63a5d9fe6f495e02850cd0d8118.svg)](https://classroom.github.com/online_ide?assignment_repo_id=464748&assignment_repo_type=GroupAssignmentRepo)
 # Obligatorisk oppgave 2 i Algoritmer og Datastrukturer
 
 Denne oppgaven er en innlevering i Algoritmer og Datastrukturer. 
 Oppgaven er levert av følgende studenter:
-* Navn Navnesen, S123456, s123456@oslomet.no
-* ...
+* Jenny Liang Nergård, S312980, s312980@oslomet.no
+* Gro Elisabeth Oleivsgard, S344222, s344222@oslomet.no
 
 # Arbeidsfordeling
 
+*(2 pers på gruppe skal gjøre: Oppgave 1, 2, 3, 4, 5, 6, 7, 8. (fjern test av oppgave 9 og 10))*
+
 I oppgaven har vi hatt følgende arbeidsfordeling:
-* Per har hatt hovedansvar for oppgave 1, 3, og 5. 
-* Else har hatt hovedansvar for oppgave 2, 4, og 6. 
-* Fatima har hatt hovedansvar for oppgave 7 og 8. 
-* Vi har i fellesskap løst oppgave 10. 
+* Jenny har hatt hovedansvar for oppgave 1, 3, og 5. 
+* Gro har hatt hovedansvar for oppgave 2, 4, og 6. 
+* Vi har i fellesskap løst oppgave 7 og 8. 
 
 # Oppgavebeskrivelse
 
