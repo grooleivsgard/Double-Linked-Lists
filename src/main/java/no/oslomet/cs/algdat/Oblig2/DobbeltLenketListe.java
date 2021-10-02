@@ -100,14 +100,27 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     }
 
+
     @Override
     public void leggInn(int indeks, T verdi) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     *
+     * @param verdi - skal sjekkes om verdien befinner seg
+     *              i listen.
+     * @return true hvis verdien befinner seg i listen,
+     *          hvis ikke return false.
+     */
     @Override
     public boolean inneholder(T verdi) {
-        throw new UnsupportedOperationException();
+
+        if(indeksTil(verdi) == -1){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
@@ -115,10 +128,44 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     *
+     * @param verdi - verdi på Node som det skal sjekkes om befinner
+     *              seg i listen
+     * @return - indeksen/posisjonen til verdi hvis den finnes,
+     *           hvis den ikke finnes skal den returnere -1.
+     *           Hvis verdi forekommer flere ganger, skal indeksen
+     *           til den første av dem (fra venstre) returneres.
+     */
     @Override
     public int indeksTil(T verdi) {
-        throw new UnsupportedOperationException();
+
+        Node <T> q = hode;
+
+
+        if(verdi == null){
+            return -1;
+        }
+
+        for(int posisjon = 0; q != null; posisjon++){
+            if(q.verdi == verdi){
+                return posisjon;
+
+               // bør være: -- break; -- for at den ikke
+                // skal gå videre i forløkken, men funker ikke
+                // sammen med "return -1" inni for-løkken.
+
+                //sånn som det er nå vil posisjonen til SISTE
+                // verdi (dersom verdien befinner seg flere steder
+                // i listen) bli returnert, men skal være FØRSTE
+
+            } else {
+                q = q.neste;
+            }
+        }
+        return -1;
     }
+
 
     @Override
     public T oppdater(int indeks, T nyverdi) {
