@@ -11,6 +11,20 @@ import java.util.Objects;
 
 public class DobbeltLenketListe<T> implements Liste<T> {
 
+    //// MAIN TEST ///////////////////////////////////////////////////////
+    // main-metode til testing av oppgavene. Slettes før oppgaven leveres!
+    public static void main(String[] args) {
+
+        //// Oppgave 1 ///////////////////////////////////////////////////
+        Liste<String> liste = new DobbeltLenketListe<>();
+        System.out.println(liste.antall() +""+ liste.tom());
+        // Utskrift: 0 true
+
+        String[] s = {"Ole",null,"Per","Kari",null};
+        Liste<String> stringListe = new DobbeltLenketListe<>(s);
+        System.out.println(stringListe.antall() +""+ stringListe.tom());
+        // Utskrift: 3 false
+
     /**
      * Node class
      *
@@ -37,12 +51,51 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     private int antall;            // antall noder i listen, skal økes for hver innlegging og reduserer for hver fjerning
     private int endringer;         // antall endringer i listen, skal økes for hver endring i listen (innlegging, oppdatering, fjerning, nullstill)
 
+    /**
+     *
+     * Standardkontruktør.
+     *
+     * Kilde: Kompendiet, kapittel 3.3.2.
+     */
     public DobbeltLenketListe() {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
+        // (1)  'hode' og 'hale' settes til null
+        hode = hale = null;
+
+        antall = 0;         // forteller oss at vi har en tom liste
+        endringer = 0;      // ingen endringer er foreløpig gjort
     }
 
+    /**
+     *
+     * Konstruktør.
+     *
+     * Kilde: Kompendiet, kapittel 3.3.2.
+     */
     public DobbeltLenketListe(T[] a) {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
+        // (1) nuller ut alle variablene.
+        this();
+
+        // (2) finner den første i 'a' som ikke er null.
+        int i = 0;
+        for (; i < a.length && a[i] == null; i++);
+
+        if (i < a.length) {
+            Node<T> p = hode = new Node<>(a[i], null);  // den første noden
+            antall = 1;                                 // vi har minst en node
+
+            for (i++; i < a.length; i++) {
+                if (a[i] != null)
+                {
+                    p = p.neste = new Node<>(a[i], null);   // en ny node
+                    antall++;
+                }
+            }
+            hale = p;
+        }
     }
 
     public Liste<T> subliste(int fra, int til) {
@@ -51,13 +104,29 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public int antall() {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
+        // Oppgave 1
+
+        // deler av kode fra Programkode 3.1.2 b) og oppgave 2 til Avsnitt 3.1.1 fra kompendiet
+        int antall = 0;
+        for (T t : this) if (t != null) antall++;
+        // bruker en "for alle"-løkke for å telle antall verdier > 0 i tabellen
+
+            return antall;
     }
 
     @Override
     public boolean tom() {
-        throw new UnsupportedOperationException();
-    }
+        // throw new UnsupportedOperationException();
+
+        // Oppgave 1
+
+        if (antall() != 0) {
+            return false;
+        }
+        return true;
+}
 
     /**
      *
