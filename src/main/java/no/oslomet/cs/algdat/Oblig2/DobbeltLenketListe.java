@@ -4,8 +4,9 @@ package no.oslomet.cs.algdat.Oblig2;
 ////////////////// class DobbeltLenketListe //////////////////////////////
 
 
-import java.sql.SQLOutput;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Objects;
 
 
 public class DobbeltLenketListe<T> implements Liste<T> {
@@ -15,16 +16,15 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     public static void main(String[] args) {
 
         //// Oppgave 1 ///////////////////////////////////////////////////
+        Liste<String> liste = new DobbeltLenketListe<>();
+        System.out.println(liste.antall() + "" + liste.tom());
+        // Utskrift: 0 true
 
-
-        Character[] c = {'A','B','C','D','E','F','G','H','I','J',};
-        DobbeltLenketListe<Character> liste = new DobbeltLenketListe<>(c);
-        System.out.println(liste.fjern(3));
-        System.out.println(liste.toString());
-
-
+        String[] s = {"Ole", null, "Per", "Kari", null};
+        Liste<String> stringListe = new DobbeltLenketListe<>(s);
+        System.out.println(stringListe.antall() + "" + stringListe.tom());
+        // Utskrift: 3 false
     }
-
     /**
      * Node class
      *
@@ -52,8 +52,9 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     private int endringer;         // antall endringer i listen, skal økes for hver endring i listen (innlegging, oppdatering, fjerning, nullstill)
 
     /**
+     *
      * Standardkontruktør.
-     * <p>
+     *
      * Kilde: Kompendiet, kapittel 3.3.2.
      */
     public DobbeltLenketListe() {
@@ -65,35 +66,50 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
         antall = 0;         // forteller oss at vi har en tom liste
         endringer = 0;      // ingen endringer er foreløpig gjort
+
     }
 
     /**
+     *
      * Konstruktør.
-     * <p>
+     *
      * Kilde: Kompendiet, kapittel 3.3.2.
      */
     public DobbeltLenketListe(T[] a) {
+        // throw new UnsupportedOperationException();
 
+        // det kastes en null-pointer exception om listen er tom
         if (a == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("Tabellen er null!");
         }
 
+        // (1) vi går igjennom tabell 'a'
         for (int i = 0; i < a.length; i++) {
+
+            // (2) sjekker om vi er på indeks 0
             if ((i == 0) && (a[i] != null)) {
+
+                // (3) setter inn første verdi
                 hode = new Node<>(a[i], null, null);
 
+                // hvis vi ikke har satt inn andre verdier så settes verdien til første verdi
                 if (antall == 0) {
                     hale = hode;
                 }
-                antall++;
+                // vi registrer at det er satt inn antall: 1 verdi
+                antall ++;
+
+                // (4) hvis listen ikke er tom så setter ny node bakfra, til å være hale
             } else if (a[i] != null) {
                 hale.neste = new Node<>(a[i], hale, null);
                 hale = hale.neste;
+                // vi legger på antall for hver nye node vi legger inn
                 antall++;
             }
-        }
-    }
 
+        }
+
+    }
 
     public Liste<T> subliste(int fra, int til) {
         throw new UnsupportedOperationException();
@@ -103,36 +119,37 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     public int antall() {
         // throw new UnsupportedOperationException();
 
-        // Oppgave 1
-
-        // deler av kode fra Programkode 3.1.2 b) og oppgave 2 til Avsnitt 3.1.1 fra kompendiet
-
-
-        if (antall != 0) {
+        // (1) hvis antall har en verdi, så returnerer vi den
+        if ( antall != 0) {
             return antall;
+            // (2) hvis ikke returnerer vi 0
         } else {
             return 0;
         }
-
     }
 
     @Override
     public boolean tom() {
         // throw new UnsupportedOperationException();
 
-        // Oppgave 1
-
-        return antall() == 0;
-
+        // (1) hvis vi ikke har telt noen antall i listen, så er den tom
+        if (antall() != 0) {
+            // returnerer 'false' hvis listen inneholder verdier
+            return false;
+        }
+        // returnerer 'true' hvis listen er tom
+        return true;
     }
 
+
     /**
+     *
      * Noden blir enten lagt inn i en tom liste (Tilfelle 1),
      * hvor både hode og hale settes til den nye noden.
-     * <p>
+     *
      * Ellers blir noden lagt inn bakerst i listen (Tilfelle 2), hvor siste node
      * peker til den nye noden, og halen blir flyttet til siste node.
-     * <p>
+     *
      * Ved begge tilfeller økes både antall og endringer med 1.
      *
      * @param verdi - verdi på ny node
@@ -144,17 +161,17 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         //Null verdier ikke tillatt, kaster unntak
         Objects.requireNonNull(verdi);
 
-        Node<T> p = new Node<>(verdi);
+        Node <T> p = new Node<>(verdi);
 
         // Tilfelle 1: Liste er på forhånd tom
-        if ((hode == null) && (hale == null)) {
-            hode = p;
-            hale = p;
+        if((hode == null) && (hale == null)) {
+           hode = p;
+           hale = p;
 
         }
         // Tilfelle 2: Liste er ikke tom
         else {
-            Node<T> q = hale;
+            Node <T> q = hale;
             hale = p;
             q.neste = p;
             p.forrige = q;
@@ -173,14 +190,20 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     }
 
     /**
+     *
      * @param verdi - skal sjekkes om verdien befinner seg
      *              i listen.
      * @return true hvis verdien befinner seg i listen,
-     * hvis ikke return false.
+     *          hvis ikke return false.
      */
     @Override
     public boolean inneholder(T verdi) {
-        return indeksTil(verdi) != -1;
+
+        if(indeksTil(verdi) == -1){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
@@ -189,34 +212,41 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     }
 
     /**
+     *
      * @param verdi - verdi på Node som det skal sjekkes om befinner
      *              seg i listen
      * @return - indeksen/posisjonen til verdi hvis den finnes,
-     * hvis den ikke finnes skal den returnere -1.
-     * Hvis verdi forekommer flere ganger, skal indeksen
-     * til den første av dem (fra venstre) returneres.
+     *           hvis den ikke finnes skal den returnere -1.
+     *           Hvis verdi forekommer flere ganger, skal indeksen
+     *           til den første av dem (fra venstre) returneres.
      */
     @Override
     public int indeksTil(T verdi) {
 
-        Node<T> q = hode;
+        Node <T> q = hode;
 
-        int indeks = -1;
 
-        if (verdi == null) {
+        if(verdi == null){
             return -1;
         }
 
-        for (int i = 0; i < antall; i++) {
-            if (q.verdi == verdi) {
-                indeks = i;
-                break;
+        for(int posisjon = 0; q != null; posisjon++){
+            if(q.verdi == verdi){
+                return posisjon;
+
+               // bør være: -- break; -- for at den ikke
+                // skal gå videre i forløkken, men funker ikke
+                // sammen med "return -1" inni for-løkken.
+
+                //sånn som det er nå vil posisjonen til SISTE
+                // verdi (dersom verdien befinner seg flere steder
+                // i listen) bli returnert, men skal være FØRSTE
+
             } else {
                 q = q.neste;
             }
         }
-        return indeks;
-
+        return -1;
     }
 
 
@@ -225,246 +255,141 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * Skal fjerne indeks.verdi fra listen, og returnere true.
-     * Hvis det er flere forekomster av verdier, skal kun
-     * den første (fra venstre) fjernes.
-     *
-     * Det skal ikke kastes unntak hvis verdi er null, men returnere
-     * false.
-     *
-     * Skal være så effektiv som mulig.
-     *
-     *  * HUSK følgende tilfeller:
-     *      *      (1) At den første noden i listen fjernes
-     *      *      (2) At den siste noden i listen fjernes
-     *      *      (3) At en verdi mellom to andre fjernes
-     *      *      --> Alle neste- og forrigepekere må være korrekte etter fjerningen.
-     *      *
-     *      *          Bruk metodene toString() og omvendtString() for å sjekke
-     *      *          at alle pekerne er satt riktig
-     *      *
-     *      * HUSK at:
-     *      *      - variabel antall skal reduseres
-     *      *      - variabel endringer skal økes
-     *      *      - sjekk om listen blir tom etter fjerningen
-     *
-     * @param verdi -- verdi på plass indeks skal fjernes.
-     * @return -- true, dersom verdien er funnet og fjernet. false hvis den
-     * ikke er funnet, eller om verdi = null.
-     */
-
     @Override
     public boolean fjern(T verdi) {
-
-        Node<T> p = hode;
-        boolean funnet = false;
-
-
-        while(p != null) {
-            if (p.verdi == verdi) {
-                funnet = true;
-                break;
-            }
-            else {
-                p = p.neste;
-            }
-        }
-
-        if (funnet) {
-            p.neste.forrige = p.forrige;      //fjerner noden
-            p.forrige.neste = p.neste;
-        }
-
-        return funnet;
-
-}
-
-    /**
-     * Skal finne en posisjon indeks, for så å
-     * fjerne og returnere verdien.
-     * <p>
-     * Skal være så effektiv som mulig. Skal ikke kalle på andre metoder.
-     * <p>
-     * HUSK følgende tilfeller:
-     * (1) At den første noden i listen fjernes
-     * (2) At den siste noden i listen fjernes
-     * (3) At en verdi mellom to andre fjernes
-     * --> Alle neste- og forrigepekere må være korrekte etter fjerningen.
-     * <p>
-     * Bruk metodene toString() og omvendtString() for å sjekke
-     * at alle pekerne er satt riktig
-     * <p>
-     * HUSK at:
-     * - variabel antall skal reduseres
-     * - variabel endringer skal økes
-     * - sjekk om listen blir tom etter fjerningen
-     *
-     * @param indeks skal finnes og fjernes.
-     * @return indeks -- verdien som er fjernet.
-     */
-    @Override
-        public T fjern (int indeks){
-        indeksKontroll(indeks,false);
-
-        T fjernIndex;
-        //kun en node i listen:
-        if (antall == 1){
-            fjernIndex = hode.verdi;
-            hode = hale = null;
-        }
-        //fjerne hodet:
-        else if (indeks == 0){
-            fjernIndex = hode.verdi;
-            hode = hode.neste;
-            hode.neste.forrige = null;
-        }
-        //fjerne halen:
-        else if (indeks == antall -1){
-            fjernIndex = hale.verdi;
-            hale = hale.forrige;
-            hale.forrige.neste = null;
-
-        }
-        //noden er et sted mellom hode og hale:
-        else {
-            /*
-            Node<T> current = finnNode(indeks);
-            fjernIndex = current.verdi;
-            current.forrige.neste = current.neste;
-            current.neste.forrige = current.forrige;
-
-             */
-        }
-
-        antall--;
-        endringer++;
-        return fjernIndex;
+        throw new UnsupportedOperationException();
     }
 
-        @Override
-        public void nullstill () {
-            throw new UnsupportedOperationException();
-        }
+    @Override
+    public T fjern(int indeks) {
+        throw new UnsupportedOperationException();
+    }
 
-        /**
-         * ---- toString ---
-         * @return en toString, som inneholder listens verdier, fra hode til hale.
-         * Hvis listen feks inneholder tallene 1, 2, 3,
-         * skal metoden returnere strengen "[1, 2, 3]" og kun "[]" hvis listen er tom.
-         *
-         * Bruker en StringBuilder til å opprette tegnstrengen.
-         *
-         * Traverserer fra hode til hale ved hjelp av neste-pekere.
-         *
-         * Kilde: Kompendiet, kapittel 3.3.2.
-         */
+    @Override
+    public void nullstill() {
+        throw new UnsupportedOperationException();
+    }
 
-        @Override
-        public String toString () {
+    /**
+     * ---- toString ---
+     * @return en toString, som inneholder listens verdier, fra hode til hale.
+     * Hvis listen feks inneholder tallene 1, 2, 3,
+     * skal metoden returnere strengen "[1, 2, 3]" og kun "[]" hvis listen er tom.
+     *
+     * Bruker en StringBuilder til å opprette tegnstrengen.
+     *
+     * Traverserer fra hode til hale ved hjelp av neste-pekere.
+     *
+     * Kilde: Kompendiet, kapittel 3.3.2.
+     */
 
-            StringBuilder s = new StringBuilder();
-            boolean hasNext = false;
+    @Override
+    public String toString() {
+
+        StringBuilder s = new StringBuilder();
+
+        // (1) Setter klammeparantes i starten av String
+        s.append('[');
+
+        // (2) Sjekker om liste er tom, hvis ikke løpes det gjennom ved å flytte neste-peker
+        if(!tom()){
             Node<T> q = hode;
+            s.append(q.verdi);
 
-            // (1) Setter klammeparantes i starten av String
-            s.append('[');
+            q = q.neste;
 
-            // (2) Sjekker om liste er tom, hvis ikke løpes det gjennom ved å flytte neste-peker
-            while(hasNext && q != null){
-                if(q.neste == null){
-                    hasNext = false;
-                    s.append(q.verdi);
-                } else {
-                    s.append(q.verdi).append(',').append(' ');
-                    q = q.neste;
-                }
+            // (3) Frem til siste node (hvor q = null), sett komma mellom verdiene.
+            while(q != null){
+                s.append(',').append(' ').append(q.verdi);
+                q = q.neste;
             }
-            s.append(']');
-            return s.toString();
         }
 
-        /**
-         *
-         * @return en toString som inneholder listens verdier i omvendt rekkefølge,
-         * fra hale til hode.
-         *
-         * Bruker en StringBuilder til å opprette tegnstrengen.
-         *
-         * Traverserer fra hale til hode ved hjelp
-         * av forrige-pekere.
-         *
-         * Kilde: Kompendiet, kapittel 3.3.2.
-         */
-        public String omvendtString () {
+        // (4) Legg på en klammeparantes på slutten av stringen
+        s.append(']');
 
-            StringBuilder s = new StringBuilder();
+        return s.toString();
+    }
 
-            s.append('[');
+    /**
+     *
+     * @return en toString som inneholder listens verdier i omvendt rekkefølge,
+     * fra hale til hode.
+     *
+     * Bruker en StringBuilder til å opprette tegnstrengen.
+     *
+     * Traverserer fra hale til hode ved hjelp
+     * av forrige-pekere.
+     *
+     * Kilde: Kompendiet, kapittel 3.3.2.
+     */
+    public String omvendtString() {
 
-            if (!tom()) {
-                Node<T> r = hale;
-                s.append(hale.verdi);
+        StringBuilder s = new StringBuilder();
 
+        s.append('[');
+
+        if(!tom()){
+            Node<T>r = hale;
+            s.append(hale.verdi);
+
+            r = r.forrige;
+
+            while(r != null){
+                s.append(',').append(' ').append(r.verdi);
                 r = r.forrige;
-
-                while (r != null) {
-                    s.append(',').append(' ').append(r.verdi);
-                    r = r.forrige;
-                }
             }
-            s.append(']');
+        }
+        s.append(']');
 
-            return s.toString();
+        return s.toString();
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        throw new UnsupportedOperationException();
+    }
+
+    public Iterator<T> iterator(int indeks) {
+        throw new UnsupportedOperationException();
+    }
+
+    private class DobbeltLenketListeIterator implements Iterator<T> {
+        private Node<T> denne;
+        private boolean fjernOK;
+        private int iteratorendringer;
+
+        private DobbeltLenketListeIterator() {
+            denne = hode;     // p starter på den første i listen
+            fjernOK = false;  // blir sann når next() kalles
+            iteratorendringer = endringer;  // teller endringer
+        }
+
+        private DobbeltLenketListeIterator(int indeks) {
+            throw new UnsupportedOperationException();
         }
 
         @Override
-        public Iterator<T> iterator () {
+        public boolean hasNext() {
+            return denne != null;
+        }
+
+        @Override
+        public T next() {
             throw new UnsupportedOperationException();
         }
 
-        public Iterator<T> iterator ( int indeks){
+        @Override
+        public void remove() {
             throw new UnsupportedOperationException();
         }
 
+    } // class DobbeltLenketListeIterator
 
+    public static <T> void sorter(Liste<T> liste, Comparator<? super T> c) {
+        throw new UnsupportedOperationException();
+    }
 
-        private class DobbeltLenketListeIterator implements Iterator<T> {
-            private Node<T> denne;
-            private boolean fjernOK;
-            private int iteratorendringer;
-
-            private DobbeltLenketListeIterator() {
-                denne = hode;     // p starter på den første i listen
-                fjernOK = false;  // blir sann når next() kalles
-                iteratorendringer = endringer;  // teller endringer
-            }
-
-            private DobbeltLenketListeIterator(int indeks) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public boolean hasNext() {
-                return denne != null;
-            }
-
-            @Override
-            public T next() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-
-        } // class DobbeltLenketListeIterator
-
-        public static <T > void sorter (Liste < T > liste, Comparator < ? super T > c){
-            throw new UnsupportedOperationException();
-        }
-
-    } // class DobbeltLenketListe
+} // class DobbeltLenketListe
 
 
