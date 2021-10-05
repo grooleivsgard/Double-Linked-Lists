@@ -17,14 +17,14 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
         //// Oppgave 1 ///////////////////////////////////////////////////
         Liste<String> liste = new DobbeltLenketListe<>();
-        System.out.println(liste.antall() +""+ liste.tom());
+        System.out.println(liste.antall() + "" + liste.tom());
         // Utskrift: 0 true
 
-        String[] s = {"Ole",null,"Per","Kari",null};
+        String[] s = {"Ole", null, "Per", "Kari", null};
         Liste<String> stringListe = new DobbeltLenketListe<>(s);
-        System.out.println(stringListe.antall() +""+ stringListe.tom());
+        System.out.println(stringListe.antall() + "" + stringListe.tom());
         // Utskrift: 3 false
-
+    }
     /**
      * Node class
      *
@@ -61,10 +61,12 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         // throw new UnsupportedOperationException();
 
         // (1)  'hode' og 'hale' settes til null
-        hode = hale = null;
+        hode = null;
+        hale = null;
 
         antall = 0;         // forteller oss at vi har en tom liste
         endringer = 0;      // ingen endringer er foreløpig gjort
+
     }
 
     /**
@@ -76,26 +78,37 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     public DobbeltLenketListe(T[] a) {
         // throw new UnsupportedOperationException();
 
-        // (1) nuller ut alle variablene.
-        this();
-
-        // (2) finner den første i 'a' som ikke er null.
-        int i = 0;
-        for (; i < a.length && a[i] == null; i++);
-
-        if (i < a.length) {
-            Node<T> p = hode = new Node<>(a[i], null);  // den første noden
-            antall = 1;                                 // vi har minst en node
-
-            for (i++; i < a.length; i++) {
-                if (a[i] != null)
-                {
-                    p = p.neste = new Node<>(a[i], null);   // en ny node
-                    antall++;
-                }
-            }
-            hale = p;
+        // det kastes en null-pointer exception om listen er tom
+        if (a == null) {
+            throw new NullPointerException("Tabellen er null!");
         }
+
+        // (1) vi går igjennom tabell 'a'
+        for (int i = 0; i < a.length; i++) {
+
+            // (2) sjekker om vi er på indeks 0
+            if ((i == 0) && (a[i] != null)) {
+
+                // (3) setter inn første verdi
+                hode = new Node<>(a[i], null, null);
+
+                // hvis vi ikke har satt inn andre verdier så settes verdien til første verdi
+                if (antall == 0) {
+                    hale = hode;
+                }
+                // vi registrer at det er satt inn antall: 1 verdi
+                antall ++;
+
+                // (4) hvis listen ikke er tom så setter ny node bakfra, til å være hale
+            } else if (a[i] != null) {
+                hale.neste = new Node<>(a[i], hale, null);
+                hale = hale.neste;
+                // vi legger på antall for hver nye node vi legger inn
+                antall++;
+            }
+
+        }
+
     }
 
     public Liste<T> subliste(int fra, int til) {
@@ -106,27 +119,28 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     public int antall() {
         // throw new UnsupportedOperationException();
 
-        // Oppgave 1
-
-        // deler av kode fra Programkode 3.1.2 b) og oppgave 2 til Avsnitt 3.1.1 fra kompendiet
-        int antall = 0;
-        for (T t : this) if (t != null) antall++;
-        // bruker en "for alle"-løkke for å telle antall verdier > 0 i tabellen
-
+        // (1) hvis antall har en verdi, så returnerer vi den
+        if ( antall != 0) {
             return antall;
+            // (2) hvis ikke returnerer vi 0
+        } else {
+            return 0;
+        }
     }
 
     @Override
     public boolean tom() {
         // throw new UnsupportedOperationException();
 
-        // Oppgave 1
-
+        // (1) hvis vi ikke har telt noen antall i listen, så er den tom
         if (antall() != 0) {
+            // returnerer 'false' hvis listen inneholder verdier
             return false;
         }
+        // returnerer 'true' hvis listen er tom
         return true;
-}
+    }
+
 
     /**
      *
