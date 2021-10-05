@@ -4,10 +4,7 @@ package no.oslomet.cs.algdat.Oblig2;
 ////////////////// class DobbeltLenketListe //////////////////////////////
 
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 
 public class DobbeltLenketListe<T> implements Liste<T> {
@@ -18,17 +15,10 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
         //// Oppgave 1 ///////////////////////////////////////////////////
 
-        DobbeltLenketListe<Integer> liste = new DobbeltLenketListe<>();
-        System.out.println(liste.toString() + " " + liste.omvendtString());
-        for (int i = 1; i <= 3; i++) {
-            liste.leggInn(i);
-            System.out.println(liste.toString() + " " + liste.omvendtString());
-        }
-// Utskrift:
-// [] []
-// [1] [1]
-// [1, 2] [2, 1]
-// [1, 2, 3] [3, 2, 1]
+
+        Character[] c = {'A','B','C','B','E','F','B','H','I','J',};
+        DobbeltLenketListe<Character> liste = new DobbeltLenketListe<>(c);
+        System.out.println(liste.indeksTil('B'));
 
 
     }
@@ -227,29 +217,24 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
             Node<T> q = hode;
 
+            int indeks = -1;
 
             if (verdi == null) {
                 return -1;
             }
 
-            for (int posisjon = 0; q != null; posisjon++) {
+            for (int i = 0; i < antall; i++) {
                 if (q.verdi == verdi) {
-                    return posisjon;
-
-                    // bør være: -- break; -- for at den ikke
-                    // skal gå videre i forløkken, men funker ikke
-                    // sammen med "return -1" inni for-løkken.
-
-                    //sånn som det er nå vil posisjonen til SISTE
-                    // verdi (dersom verdien befinner seg flere steder
-                    // i listen) bli returnert, men skal være FØRSTE
-
-                } else {
+                    indeks = i;
+                    break;
+                } else{
                     q = q.neste;
                 }
             }
-            return -1;
+            return indeks;
+
         }
+
 
 
         @Override
