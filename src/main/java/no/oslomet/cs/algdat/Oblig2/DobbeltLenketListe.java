@@ -4,6 +4,7 @@ package no.oslomet.cs.algdat.Oblig2;
 ////////////////// class DobbeltLenketListe //////////////////////////////
 
 
+import java.sql.SQLOutput;
 import java.util.*;
 
 
@@ -16,268 +17,213 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         //// Oppgave 1 ///////////////////////////////////////////////////
 
 
-        Character[] c = {'A','B','C','B','E','F','B','H','I','J',};
+        Character[] c = {'A','B','C','D','E','F','G','H','I','J',};
         DobbeltLenketListe<Character> liste = new DobbeltLenketListe<>(c);
-        System.out.println(liste.indeksTil('K'));
-        System.out.println(liste.inneholder('K'));
+        System.out.println(liste.fjern(3));
+        System.out.println(liste.toString());
 
 
     }
-        /**
-         * Node class
-         *
-         * @param <T>
-         */
-        private static final class Node<T> {
-            private T verdi;                   // nodens verdi
-            private Node<T> forrige, neste;    // pekere
 
-            private Node(T verdi, Node<T> forrige, Node<T> neste) {
-                this.verdi = verdi;
-                this.forrige = forrige;
-                this.neste = neste;
-            }
+    /**
+     * Node class
+     *
+     * @param <T>
+     */
+    private static final class Node<T> {
+        private T verdi;                   // nodens verdi
+        private Node<T> forrige, neste;    // pekere
 
-            private Node(T verdi) {
-                this(verdi, null, null);
-            }
+        private Node(T verdi, Node<T> forrige, Node<T> neste) {
+            this.verdi = verdi;
+            this.forrige = forrige;
+            this.neste = neste;
         }
 
-        // instansvariabler
-        private Node<T> hode;          // peker til den første i listen
-        private Node<T> hale;          // peker til den siste i listen
-        private int antall;            // antall noder i listen, skal økes for hver innlegging og reduserer for hver fjerning
-        private int endringer;         // antall endringer i listen, skal økes for hver endring i listen (innlegging, oppdatering, fjerning, nullstill)
+        private Node(T verdi) {
+            this(verdi, null, null);
+        }
+    }
 
-        /**
-         *
-         * Standardkontruktør.
-         *
-         * Kilde: Kompendiet, kapittel 3.3.2.
-         */
+    // instansvariabler
+    private Node<T> hode;          // peker til den første i listen
+    private Node<T> hale;          // peker til den siste i listen
+    private int antall;            // antall noder i listen, skal økes for hver innlegging og reduserer for hver fjerning
+    private int endringer;         // antall endringer i listen, skal økes for hver endring i listen (innlegging, oppdatering, fjerning, nullstill)
+
+    /**
+     * Standardkontruktør.
+     * <p>
+     * Kilde: Kompendiet, kapittel 3.3.2.
+     */
     public DobbeltLenketListe() {
-            // throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
 
-            // (1)  'hode' og 'hale' settes til null
-            hode = null;
-            hale = null;
+        // (1)  'hode' og 'hale' settes til null
+        hode = null;
+        hale = null;
 
-            antall = 0;         // forteller oss at vi har en tom liste
-            endringer = 0;      // ingen endringer er foreløpig gjort
-        }
+        antall = 0;         // forteller oss at vi har en tom liste
+        endringer = 0;      // ingen endringer er foreløpig gjort
+    }
 
-        /**
-         *
-         * Konstruktør.
-         *
-         * Kilde: Kompendiet, kapittel 3.3.2.
-         */
-    public DobbeltLenketListe(T[]a) {
+    /**
+     * Konstruktør.
+     * <p>
+     * Kilde: Kompendiet, kapittel 3.3.2.
+     */
+    public DobbeltLenketListe(T[] a) {
 
-        if(a == null) {
+        if (a == null) {
             throw new NullPointerException();
         }
 
         for (int i = 0; i < a.length; i++) {
+            if ((i == 0) && (a[i] != null)) {
+                hode = new Node<>(a[i], null, null);
 
-                if ((i == 0) && (a[i] != null)) {
-                    hode = new Node<>(a[i], null, null);
-
-                    if (antall == 0) {
-                        hale = hode;
-                    }
-                    antall++;
-                } else if (a[i] != null){
-                    hale.neste = new Node<>(a[i], hale, null);
-                    hale = hale.neste;
-                    antall++;
+                if (antall == 0) {
+                    hale = hode;
                 }
-
+                antall++;
+            } else if (a[i] != null) {
+                hale.neste = new Node<>(a[i], hale, null);
+                hale = hale.neste;
+                antall++;
             }
+        }
+    }
 
+
+    public Liste<T> subliste(int fra, int til) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int antall() {
+        // throw new UnsupportedOperationException();
+
+        // Oppgave 1
+
+        // deler av kode fra Programkode 3.1.2 b) og oppgave 2 til Avsnitt 3.1.1 fra kompendiet
+
+
+        if (antall != 0) {
+            return antall;
+        } else {
+            return 0;
         }
 
+    }
 
+    @Override
+    public boolean tom() {
+        // throw new UnsupportedOperationException();
 
+        // Oppgave 1
 
-        public Liste<T> subliste ( int fra, int til){
-            throw new UnsupportedOperationException();
-        }
+        return antall() == 0;
 
-        @Override
-        public int antall () {
-            // throw new UnsupportedOperationException();
-
-            // Oppgave 1
-
-            // deler av kode fra Programkode 3.1.2 b) og oppgave 2 til Avsnitt 3.1.1 fra kompendiet
-
-
-
-            if (antall != 0) {
-                return antall;
-            } else {
-                return 0;
-            }
-
-        }
-
-        @Override
-        public boolean tom () {
-            // throw new UnsupportedOperationException();
-
-            // Oppgave 1
-
-            if (antall() != 0) {
-                return false;
-            }
-            return true;
-
-        }
-
-        /**
-         *
-         * Noden blir enten lagt inn i en tom liste (Tilfelle 1),
-         * hvor både hode og hale settes til den nye noden.
-         *
-         * Ellers blir noden lagt inn bakerst i listen (Tilfelle 2), hvor siste node
-         * peker til den nye noden, og halen blir flyttet til siste node.
-         *
-         * Ved begge tilfeller økes både antall og endringer med 1.
-         *
-         * @param verdi - verdi på ny node
-         * @return true - dersom verdi != null.
-         */
-        @Override
-        public boolean leggInn (T verdi){
-
-            //Null verdier ikke tillatt, kaster unntak
-            Objects.requireNonNull(verdi);
-
-            Node<T> p = new Node<>(verdi);
-
-            // Tilfelle 1: Liste er på forhånd tom
-            if ((hode == null) && (hale == null)) {
-                hode = p;
-                hale = p;
-
-            }
-            // Tilfelle 2: Liste er ikke tom
-            else {
-                Node<T> q = hale;
-                hale = p;
-                q.neste = p;
-                p.forrige = q;
-
-            }
-            antall++;
-            endringer++;
-            return true;
-
-        }
-
-
-        @Override
-        public void leggInn ( int indeks, T verdi){
-            throw new UnsupportedOperationException();
-        }
-
-        /**
-         *
-         * @param verdi - skal sjekkes om verdien befinner seg
-         *              i listen.
-         * @return true hvis verdien befinner seg i listen,
-         *          hvis ikke return false.
-         */
-        @Override
-        public boolean inneholder (T verdi){
-            return indeksTil(verdi) != -1;
-        }
-
-        @Override
-        public T hent ( int indeks){
-            throw new UnsupportedOperationException();
-        }
-
-        /**
-         *
-         * @param verdi - verdi på Node som det skal sjekkes om befinner
-         *              seg i listen
-         * @return - indeksen/posisjonen til verdi hvis den finnes,
-         *           hvis den ikke finnes skal den returnere -1.
-         *           Hvis verdi forekommer flere ganger, skal indeksen
-         *           til den første av dem (fra venstre) returneres.
-         */
-        @Override
-        public int indeksTil (T verdi){
-
-            Node<T> q = hode;
-
-            int indeks = -1;
-
-            if (verdi == null) {
-                return -1;
-            }
-
-            for (int i = 0; i < antall; i++) {
-                if (q.verdi == verdi) {
-                    indeks = i;
-                    break;
-                } else{
-                    q = q.neste;
-                }
-            }
-            return indeks;
-
-        }
-
-
-
-        @Override
-        public T oppdater ( int indeks, T nyverdi){
-            throw new UnsupportedOperationException();
-        }
+    }
 
     /**
-     * Skal finne en posisjon indeks, for så å
-     * fjerne og returnere verdien.
+     * Noden blir enten lagt inn i en tom liste (Tilfelle 1),
+     * hvor både hode og hale settes til den nye noden.
+     * <p>
+     * Ellers blir noden lagt inn bakerst i listen (Tilfelle 2), hvor siste node
+     * peker til den nye noden, og halen blir flyttet til siste node.
+     * <p>
+     * Ved begge tilfeller økes både antall og endringer med 1.
      *
-     * Skal være så effektiv som mulig. Skal ikke kalle på andre metoder.
-     *
-     * HUSK følgende tilfeller:
-     *      (1) At den første noden i listen fjernes
-     *      (2) At den siste noden i listen fjernes
-     *      (3) At en verdi mellom to andre fjernes
-     *      --> Alle neste- og forrigepekere må være korrekte etter fjerningen.
-     *
-     *          Bruk metodene toString() og omvendtString() for å sjekke
-     *          at alle pekerne er satt riktig
-     *
-     * HUSK at:
-     *      - variabel antall skal reduseres
-     *      - variabel endringer skal økes
-     *      - sjekk om listen blir tom etter fjerningen
-     *
-     *
-     * @param verdi skal finnes og fjernes.
-     * @return indeks -- verdien som er fjernet.
+     * @param verdi - verdi på ny node
+     * @return true - dersom verdi != null.
      */
-        @Override
-        public boolean fjern (T verdi){
-            /*
-            ------- Sjekkliste for fjern metodene-----
-            - Blir det korrekt hvis listen fra før er tom?
-            - Blir pekerne (forrige og neste) korrekte i alle noder hvis første verdi (indeks 0 fjernes?
-            - Blir pekerne (forrige og neste) korrekte i alle noder hvis siste verdi fjernes?
-            - Blir pekerne (forrige og neste) korrekte i alle noder hvis det fjernes en verdi mellom to verdier?
-            - Blir pekerne (forrige og neste) korrekte hvis listen etter fjerningen får kun é verdi? Hva med ingen verdier?
-            - Blir antall redusert?
-            - Blir endringer økt?
-             */
+    @Override
+    public boolean leggInn(T verdi) {
 
+        //Null verdier ikke tillatt, kaster unntak
+        Objects.requireNonNull(verdi);
 
-            throw new UnsupportedOperationException();
+        Node<T> p = new Node<>(verdi);
+
+        // Tilfelle 1: Liste er på forhånd tom
+        if ((hode == null) && (hale == null)) {
+            hode = p;
+            hale = p;
+
         }
+        // Tilfelle 2: Liste er ikke tom
+        else {
+            Node<T> q = hale;
+            hale = p;
+            q.neste = p;
+            p.forrige = q;
+
+        }
+        antall++;
+        endringer++;
+        return true;
+
+    }
+
+
+    @Override
+    public void leggInn(int indeks, T verdi) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @param verdi - skal sjekkes om verdien befinner seg
+     *              i listen.
+     * @return true hvis verdien befinner seg i listen,
+     * hvis ikke return false.
+     */
+    @Override
+    public boolean inneholder(T verdi) {
+        return indeksTil(verdi) != -1;
+    }
+
+    @Override
+    public T hent(int indeks) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @param verdi - verdi på Node som det skal sjekkes om befinner
+     *              seg i listen
+     * @return - indeksen/posisjonen til verdi hvis den finnes,
+     * hvis den ikke finnes skal den returnere -1.
+     * Hvis verdi forekommer flere ganger, skal indeksen
+     * til den første av dem (fra venstre) returneres.
+     */
+    @Override
+    public int indeksTil(T verdi) {
+
+        Node<T> q = hode;
+
+        int indeks = -1;
+
+        if (verdi == null) {
+            return -1;
+        }
+
+        for (int i = 0; i < antall; i++) {
+            if (q.verdi == verdi) {
+                indeks = i;
+                break;
+            } else {
+                q = q.neste;
+            }
+        }
+        return indeks;
+
+    }
+
+
+    @Override
+    public T oppdater(int indeks, T nyverdi) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Skal fjerne indeks.verdi fra listen, og returnere true.
@@ -303,15 +249,98 @@ public class DobbeltLenketListe<T> implements Liste<T> {
      *      *      - variabel endringer skal økes
      *      *      - sjekk om listen blir tom etter fjerningen
      *
-     * @param indeks -- verdi på plass indeks skal fjernes.
+     * @param verdi -- verdi på plass indeks skal fjernes.
      * @return -- true, dersom verdien er funnet og fjernet. false hvis den
      * ikke er funnet, eller om verdi = null.
      */
 
     @Override
-        public T fjern ( int indeks){
-            throw new UnsupportedOperationException();
+    public boolean fjern(T verdi) {
+
+        Node<T> p = hode;
+        boolean funnet = false;
+
+
+        while(p != null) {
+            if (p.verdi == verdi) {
+                funnet = true;
+                break;
+            }
+            else {
+                p = p.neste;
+            }
         }
+
+        if (funnet) {
+            p.neste.forrige = p.forrige;      //fjerner noden
+            p.forrige.neste = p.neste;
+        }
+
+        return funnet;
+
+}
+
+    /**
+     * Skal finne en posisjon indeks, for så å
+     * fjerne og returnere verdien.
+     * <p>
+     * Skal være så effektiv som mulig. Skal ikke kalle på andre metoder.
+     * <p>
+     * HUSK følgende tilfeller:
+     * (1) At den første noden i listen fjernes
+     * (2) At den siste noden i listen fjernes
+     * (3) At en verdi mellom to andre fjernes
+     * --> Alle neste- og forrigepekere må være korrekte etter fjerningen.
+     * <p>
+     * Bruk metodene toString() og omvendtString() for å sjekke
+     * at alle pekerne er satt riktig
+     * <p>
+     * HUSK at:
+     * - variabel antall skal reduseres
+     * - variabel endringer skal økes
+     * - sjekk om listen blir tom etter fjerningen
+     *
+     * @param indeks skal finnes og fjernes.
+     * @return indeks -- verdien som er fjernet.
+     */
+    @Override
+        public T fjern (int indeks){
+        indeksKontroll(indeks,false);
+
+        T fjernIndex;
+        //kun en node i listen:
+        if (antall == 1){
+            fjernIndex = hode.verdi;
+            hode = hale = null;
+        }
+        //fjerne hodet:
+        else if (indeks == 0){
+            fjernIndex = hode.verdi;
+            hode = hode.neste;
+            hode.neste.forrige = null;
+        }
+        //fjerne halen:
+        else if (indeks == antall -1){
+            fjernIndex = hale.verdi;
+            hale = hale.forrige;
+            hale.forrige.neste = null;
+
+        }
+        //noden er et sted mellom hode og hale:
+        else {
+            /*
+            Node<T> current = finnNode(indeks);
+            fjernIndex = current.verdi;
+            current.forrige.neste = current.neste;
+            current.neste.forrige = current.forrige;
+
+             */
+        }
+
+        antall--;
+        endringer++;
+        return fjernIndex;
+    }
 
         @Override
         public void nullstill () {
@@ -335,28 +364,14 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         public String toString () {
 
             StringBuilder s = new StringBuilder();
+            
+            Node<T> q = hode;
 
             // (1) Setter klammeparantes i starten av String
             s.append('[');
 
             // (2) Sjekker om liste er tom, hvis ikke løpes det gjennom ved å flytte neste-peker
-            if (!tom()) {
-                Node<T> q = hode;
-                s.append(q.verdi);
 
-                q = q.neste;
-
-                // (3) Frem til siste node (hvor q = null), sett komma mellom verdiene.
-                while (q != null) {
-                    s.append(',').append(' ').append(q.verdi);
-                    q = q.neste;
-                }
-            }
-
-            // (4) Legg på en klammeparantes på slutten av stringen
-            s.append(']');
-
-            return s.toString();
         }
 
         /**
@@ -401,6 +416,8 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         public Iterator<T> iterator ( int indeks){
             throw new UnsupportedOperationException();
         }
+
+
 
         private class DobbeltLenketListeIterator implements Iterator<T> {
             private Node<T> denne;
