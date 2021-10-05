@@ -1295,5 +1295,5 @@ class Oblig2Test {
             antallFeil++;
         }
     }
-
 }
+
