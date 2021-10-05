@@ -364,14 +364,24 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         public String toString () {
 
             StringBuilder s = new StringBuilder();
-            
+            boolean hasNext = false;
             Node<T> q = hode;
 
             // (1) Setter klammeparantes i starten av String
             s.append('[');
 
             // (2) Sjekker om liste er tom, hvis ikke løpes det gjennom ved å flytte neste-peker
-
+            while(hasNext && q != null){
+                if(q.neste == null){
+                    hasNext = false;
+                    s.append(q.verdi);
+                } else {
+                    s.append(q.verdi).append(',').append(' ');
+                    q = q.neste;
+                }
+            }
+            s.append(']');
+            return s.toString();
         }
 
         /**
