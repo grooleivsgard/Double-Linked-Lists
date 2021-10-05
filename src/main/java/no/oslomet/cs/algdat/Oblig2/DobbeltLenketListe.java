@@ -18,7 +18,8 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
         Character[] c = {'A','B','C','B','E','F','B','H','I','J',};
         DobbeltLenketListe<Character> liste = new DobbeltLenketListe<>(c);
-        System.out.println(liste.indeksTil('B'));
+        System.out.println(liste.indeksTil('K'));
+        System.out.println(liste.inneholder('K'));
 
 
     }
@@ -190,12 +191,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
          */
         @Override
         public boolean inneholder (T verdi){
-
-            if (indeksTil(verdi) == -1) {
-                return false;
-            } else {
-                return true;
-            }
+            return indeksTil(verdi) != -1;
         }
 
         @Override
