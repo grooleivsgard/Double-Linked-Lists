@@ -15,15 +15,54 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     // main-metode til testing av oppgavene. Slettes før oppgaven leveres!
     public static void main(String[] args) {
 
+        /*
+
         //// Oppgave 1 ///////////////////////////////////////////////////
-        Liste<String> liste = new DobbeltLenketListe<>();
-        System.out.println(liste.antall() + "" + liste.tom());
+        Liste<String> liste1a = new DobbeltLenketListe<>();
+        System.out.println(liste1a.antall() + " " + liste1a.tom());
         // Utskrift: 0 true
 
         String[] s = {"Ole", null, "Per", "Kari", null};
-        Liste<String> stringListe = new DobbeltLenketListe<>(s);
-        System.out.println(stringListe.antall() + "" + stringListe.tom());
+        Liste<String> liste1b = new DobbeltLenketListe<>(s);
+        System.out.println(liste1b.antall() + " " + liste1b.tom());
         // Utskrift: 3 false
+
+
+        //// Oppgave 2 a) ///////////////////////////////////////////////////
+        String[] s1 = {}, s2 = {"A"}, s3 = {null,"A",null,"B",null};
+        DobbeltLenketListe<String> l1 = new DobbeltLenketListe<>(s1);
+        DobbeltLenketListe<String> l2 = new DobbeltLenketListe<>(s2);
+        DobbeltLenketListe<String> l3 = new DobbeltLenketListe<>(s3);
+        System.out.println(l1.toString() +" "+ l2.toString()+" "+ l3.toString() +" "+
+                l1.omvendtString()+" "+ l2.omvendtString() +" "+ l3.omvendtString());
+        // Utskrift: [] [A] [A, B] [] [A] [B, A]
+
+
+        //// Oppgave 2 b) ///////////////////////////////////////////////////
+        DobbeltLenketListe<Integer> liste2b = new DobbeltLenketListe<>();
+        System.out.println(liste2b.toString() +""+ liste2b.omvendtString());
+        for(int i = 1; i <= 3; i++) {
+            liste2b.leggInn(i);
+            System.out.println(liste2b.toString() +" "+ liste2b.omvendtString());
+        }
+        // Utskrift:
+        // [] []
+        // [1] [1]
+        // [1, 2] [2, 1]
+        // [1, 2, 3] [3, 2, 1]
+
+
+        //// Oppgave 3 b) ///////////////////////////////////////////////////
+        Character[] c = {'A','B','C','D','E','F','G','H','I','J',};
+        DobbeltLenketListe<Character> liste3b = new DobbeltLenketListe<>(c);
+        System.out.println(liste3b.subliste(3,8)); // [D,E, F, G, H]
+        System.out.println(liste3b.subliste(5,5)); // []
+        System.out.println(liste3b.subliste(8,liste3b.antall())); // [I, J]
+        System.out.println(liste3b.subliste(0,11)); // skal kaste unntak
+
+        */
+
+        /// Oppgave 5 /////////////////////////////////////////////////////
     }
     /**
      * Node class
@@ -74,6 +113,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
      * Konstruktør.
      *
      * Kilde: Kompendiet, kapittel 3.3.2.
+     * Kilde: https://www.w3schools.com/java/java_break.asp
      */
     public DobbeltLenketListe(T[] a) {
         // throw new UnsupportedOperationException();
@@ -83,36 +123,68 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             throw new NullPointerException("Tabellen er null!");
         }
 
+        Node<T> q = null; // oppretter en midlertidig node
         // (1) vi går igjennom tabell 'a'
         for (int i = 0; i < a.length; i++) {
+            if(a[i] == null) continue; // hvis verdi er null, så hoppver vi videre i loopen
+            antall++; // teller første verdi
 
-            // (2) sjekker om vi er på indeks 0
-            if ((i == 0) && (a[i] != null)) {
+            // (2) sjekker om vi er på første indeks
+            if (hode == null) {
 
-                // (3) setter inn første verdi
+                // (3) første verdi settes til hode
                 hode = new Node<>(a[i], null, null);
+                hale = hode;
+                q = hode; // midelrtidig node settes til hode
 
-                // hvis vi ikke har satt inn andre verdier så settes verdien til første verdi
-                if (antall == 0) {
-                    hale = hode;
-                }
-                // vi registrer at det er satt inn antall: 1 verdi
-                antall ++;
-
-                // (4) hvis listen ikke er tom så setter ny node bakfra, til å være hale
-            } else if (a[i] != null) {
-                hale.neste = new Node<>(a[i], hale, null);
-                hale = hale.neste;
-                // vi legger på antall for hver nye node vi legger inn
-                antall++;
+                // (4) hvis verdien ikke er første, så fortsetter vi å legge inn i listen bakfra
+            } else {
+                // neste midlertidige node
+                Node<T> p = new Node<>(a[i]);
+                q.neste = p;
+                p.forrige = q;
+                q = p;
             }
-
         }
-
+        hale = q; // 'q' representerer siste verdien til slutt
     }
 
+    /**
+     *
+     * @param fra
+     * @param til
+     * @return
+     */
     public Liste<T> subliste(int fra, int til) {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
+        // sjekk om indeks [fra, til> er lovlig
+        fraTilKontroll(antall, fra, til);
+
+        Liste<T> subliste = new DobbeltLenketListe<>();
+        Node<T> start = finnNode(fra);
+        for (int i = fra; i < til; i++) {
+
+            // første verdi settes
+            if (i == fra) {
+                subliste.leggInn(start.verdi);
+                start = start.neste;
+            // neste verdiene settes
+            } else {
+                subliste.leggInn(start.verdi);
+                start = start.neste;
+            }
+        }
+
+        return subliste;
+    }
+
+    private static void fraTilKontroll(int antall, int fra, int til) {
+        if((fra < 0 ) || (fra > til) || (til > antall)) {
+            throw new IndexOutOfBoundsException("Ugyldig intervall! Må være mellom [0, " + antall + ">.");
+        }else {
+            return;
+        }
     }
 
     @Override
@@ -167,7 +239,6 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         if((hode == null) && (hale == null)) {
            hode = p;
            hale = p;
-
         }
         // Tilfelle 2: Liste er ikke tom
         else {
@@ -180,13 +251,48 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         antall++;
         endringer++;
         return true;
-
     }
 
 
+    /**
+     *
+     * Her skal verdier legges i en liste etter gitt indeks.
+     *
+     * Kilde: kompendiet 3.3.2
+     *
+     * @param indeks
+     * @param verdi
+     */
     @Override
     public void leggInn(int indeks, T verdi) {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
+
+        // Oppgave 5
+        Objects.requireNonNull(verdi, "Ikke tillatt med null-verdier!");
+
+        indeksKontroll(indeks, false);
+
+        Node<T> nyNode = finnNode(indeks);
+
+        if (indeks == 0) {
+            hode = nyNode;
+            nyNode.forrige = null;
+
+            if (antall == 0) {
+                hode = hale;
+                hale.neste = null;
+            } else {
+                hode.neste = nyNode.neste;
+            }
+        } else if (indeks == antall){
+            hale = nyNode;
+            nyNode.neste = null;
+        } else {
+            Node<T> q = nyNode.forrige;
+
+        }
+        antall ++;
     }
 
     /**
@@ -208,7 +314,12 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public T hent(int indeks) {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+        // Oppgave 3
+        // 3.3.3 a)
+        indeksKontroll(indeks, false);  // Se Liste, false: indeks = antall er ulovlig
+        endringer ++;
+        return finnNode(indeks).verdi;
     }
 
     /**
@@ -252,7 +363,57 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public T oppdater(int indeks, T nyverdi) {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+
+        // throw new UnsupportedOperationException();
+        // Oppageve 3
+
+        // sjekker at indeks ikke er null
+        // indeksKontroll(indeks, false);
+        // ny verdi kan ikke være null
+        Objects.requireNonNull(nyverdi, "Ikke tillatt med null-verdier!");
+
+        Node<T> curr = finnNode(indeks);
+
+        T gammelVerdi = curr.verdi;
+
+        // vi erstatter  gammel verdi på plass indeks med ny verdi
+        curr.verdi = nyverdi;
+
+        endringer++;
+        // returnere det som lå der fra før
+        return gammelVerdi;
+    }
+
+    // kompendiet kapittel 3.3.3
+    // Oppgave 3
+    private Node<T> finnNode(int indeks) {
+
+        indeksKontroll(indeks, false);
+
+        Node<T> p; // midlertidig peker
+
+        if(indeks <= (antall / 2)) {
+            p = hode;
+
+            for (int i = 0; i < indeks; i++) {
+                if (indeks == i) {
+                    return p;
+                } else {
+                    p = p.neste;
+                }
+            }
+        } else {
+            p = hale;
+            for (int i = antall - 1; i > (antall / 2) && (i < antall); i--) {
+                if (indeks == i) {
+                    return p;
+                } else {
+                    p = p.forrige;
+                }
+            }
+        }
+        return p;
     }
 
     @Override
