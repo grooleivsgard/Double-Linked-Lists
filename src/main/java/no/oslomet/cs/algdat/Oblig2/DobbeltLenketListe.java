@@ -476,14 +476,13 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         else if (indeks == 0){
             fjernIndex = hode.verdi;
             hode = hode.neste;
-            hode.neste.forrige = null;
+            hode.forrige = null;
         }
         //fjerne halen:
-        else if (indeks == antall -1){
+        else if (indeks == antall-1){
             fjernIndex = hale.verdi;
             hale = hale.forrige;
-            hale.forrige.neste = null;
-
+            hale.neste = null;
         }
         //noden er et sted mellom hode og hale:
         else {
