@@ -7,8 +7,6 @@ Oppgaven er levert av følgende studenter:
 
 # Arbeidsfordeling
 
-*(2 pers på gruppe skal gjøre: Oppgave 1, 2, 3, 4, 5, 6, 7, 8. (fjern test av oppgave 9 og 10))*
-
 I oppgaven har vi hatt følgende arbeidsfordeling:
 * Jenny har hatt hovedansvar for oppgave 1, 3, 5 og 7. 
 * Gro har hatt hovedansvar for oppgave 2, 4, 6 og 8.
@@ -71,3 +69,9 @@ ulike måtene var:
 
 1. måte: BUILD SUCCESSFUL in 2s, 3 actionable tasks: 1 executed, (test passed - 27 ms)
 2. måte: BUILD SUCCESSFUL in 2s, 3 actionable tasks: 1 executed, (test passed - 32 ms)
+
+I oppgave (8) har vi gjort følgende: 
+- I (a) har vi laget metoden T next() sjekkes det først om iteratorendringer er lik endringer. Dersom det ikke er det, kastes en ConcurrentModificationException. Deretter kalles metoden hasNext(), for å sjekke om det er noen flere noder igjen i listen. Hvis denne er usann, kastes en NoSuchElementException. Deretter settes fjernOK til true, en hjelpevariabel returnerDenne blir opprettet for å lagre verdien til denne, før denne.verdi flyttes til neste. 
+- I (b) lagde vi en instans av iteratorklassen, med return new DobbeltLenketListeIterator().
+- I (c) lagde vi konstruktøren private DobbeltLenketListeIterator(int indeks). Her settes noden denne til noden på indeksen som blir funnet ved kall på finnNode(indeks). Resten av metoden er lik som konstruktøren over. 
+- I (d) lagde vi metoden Iterator<T> iterator (int indeks). Her kjøres først en indekskontroll for å sjekke om indeksen er innenfor gyldige grenser. Ved hjelp av konstruktøren i C, returnerer den en instans av iteratorklassen.
