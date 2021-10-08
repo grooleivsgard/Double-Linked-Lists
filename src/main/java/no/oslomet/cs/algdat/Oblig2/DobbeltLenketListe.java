@@ -182,16 +182,18 @@ public class DobbeltLenketListe<T> implements Liste<T> {
                 start = start.neste;
             }
         }
-
         return subliste;
     }
 
     private static void fraTilKontroll(int antall, int fra, int til) {
-        if((fra < 0 ) || (fra > til) || (til > antall)) {
+        if((fra < 0 ) || (til > antall)) {
             throw new IndexOutOfBoundsException("Ugyldig intervall! Må være mellom [0, " + antall + ">.");
-        }else {
-            return;
         }
+        if (fra > til){
+            throw new IllegalArgumentException("fra " + fra + "er større en til" + til);
+        }
+        return;
+
     }
 
     @Override
@@ -278,7 +280,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         // Oppgave 5
         Objects.requireNonNull(verdi, "Ikke tillatt med null-verdier!");
 
-        indeksKontroll(indeks, false);
+        indeksKontroll(indeks, true);
 
         if (antall == 0) {
             Node<T> nyNode = new Node<>(verdi);
@@ -352,7 +354,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         }
 
         for(int posisjon = 0; q != null; posisjon++){
-            if(q.verdi == verdi){
+            if(q.verdi.equals(verdi)){
                 return posisjon;
 
                // bør være: -- break; -- for at den ikke
@@ -446,8 +448,8 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             return false;
         }
 
-        while(verdi != null) {
-            if (p.verdi == verdi) {
+        while(p != null) {
+            if (p.verdi.equals(verdi)) {
                 funnet = true;
                 break;
             } else {
@@ -456,22 +458,42 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         }
 
         if(funnet){
-            if(verdi == hode.verdi){          //if value is head
+            if(antall == 1) {
+                hode = null;
+                hale = null;
+                p.neste = null;
+                p.forrige = null;
+                antall = 0;
+                endringer++;
+                return true;
+            }
+            if(hode == p){          //if value is head
+                hode.neste.forrige = null;
                 hode = hode.neste;
                 hode.forrige = null;
-
-            } else if (verdi == hale.verdi){  //if value is tail
+                p.neste = null;
+                antall--;
+                endringer++;
+                return true;
+            } else if (hale == p){  //if value is tail
+                hale.forrige.neste = null;
                 hale = hale.forrige;
                 hale.neste = null;
+                p.forrige = null;
+                antall--;
+                endringer++;
+                return true;
             } else {                    //value is between head and tail
                 p.neste.forrige = p.forrige;
                 p.forrige.neste = p.neste;
+                p.neste = null;
+                p.forrige = null;
+                antall--;
+                endringer++;
+                return true;
             }
-            antall--;
-            endringer++;
         }
-
-        return funnet;
+        return false;
     }
 
     /**
