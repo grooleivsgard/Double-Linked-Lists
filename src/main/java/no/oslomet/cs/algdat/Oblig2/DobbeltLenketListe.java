@@ -65,7 +65,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         Character [] ch = {'A', 'C', 'E'};
         DobbeltLenketListe<Character> liste5 = new DobbeltLenketListe<>(ch);
         System.out.println(liste5.toString());
-        liste5.leggInn(2, 'B');
+        liste5.leggInn(1, 'B');
         System.out.println(liste5.toString());
     }
     /**
@@ -166,6 +166,9 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         fraTilKontroll(antall, fra, til);
 
         Liste<T> subliste = new DobbeltLenketListe<>();
+        if ((fra == 0) && (til == 0)) {
+            return subliste;
+        }
         Node<T> start = finnNode(fra);
         for (int i = fra; i < til; i++) {
 
@@ -277,26 +280,26 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
         indeksKontroll(indeks, false);
 
-        Node<T> gammelNode = finnNode(indeks);
-        Node<T> gammelNode1 = gammelNode;
-        // Node<T> nyNode = finnNode(indeks);
-
-        if (indeks == 0) {
-            hode = gammelNode;
-            gammelNode1.forrige = null;
-
-            if (antall == 0) {
-                hode = hale;
-                hale.neste = null;
-            } else {
-                hode.neste = gammelNode1.neste;
-            }
+        if (antall == 0) {
+            Node<T> nyNode = new Node<>(verdi);
+            hode = nyNode;
+            hale = hode;
+        }
+        if (indeks == 0 && antall != 0) {
+            Node<T> gammelNode = finnNode(indeks);
+            Node<T> nyNode = new Node<>(verdi, null, gammelNode);
+            hode = nyNode;
+            gammelNode.forrige = nyNode;
         } else if (indeks == antall){
-            hale = gammelNode1;
-            gammelNode1.neste = null;
+            Node<T> buffer = hale;
+            Node<T> nyNode = new Node<>(verdi, buffer, null);
+            buffer.neste = nyNode;
+            hale = nyNode;
         } else {
-            Node<T> q = gammelNode1.forrige;
-
+            Node<T> gammelNode = finnNode(indeks);
+            Node<T> nyNode = new Node<>(verdi,gammelNode.forrige, gammelNode);
+            gammelNode.forrige.neste = nyNode;
+            gammelNode.forrige = nyNode;
         }
         endringer++;
         antall ++;
@@ -398,29 +401,33 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
         indeksKontroll(indeks, false);
 
-        Node<T> p; // midlertidig peker
+        if (!tom()) {
+            Node<T> p; // midlertidig peker
+            if(indeks <= (antall / 2)) {
+                p = hode;
 
-        if(indeks <= (antall / 2)) {
-            p = hode;
-
-            for (int i = 0; i <= indeks; i++) {
-                if (indeks == i) {
-                    return p;
-                } else {
-                    p = p.neste;
+                for (int i = 0; i <= indeks; i++) {
+                    if (indeks == i) {
+                        return p;
+                    } else {
+                        p = p.neste;
+                    }
+                }
+            } else {
+                p = hale;
+                for (int i = antall - 1; i > (antall / 2) && (i < antall); i--) {
+                    if (indeks == i) {
+                        return p;
+                    } else {
+                        p = p.forrige;
+                    }
                 }
             }
-        } else {
-            p = hale;
-            for (int i = antall - 1; i > (antall / 2) && (i < antall); i--) {
-                if (indeks == i) {
-                    return p;
-                } else {
-                    p = p.forrige;
-                }
-            }
+            return p;
+        }else {
+            throw new NullPointerException("Indeks er tom!");
         }
-        return p;
+
     }
 
     /**
