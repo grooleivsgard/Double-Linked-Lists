@@ -500,6 +500,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public void nullstill() {
+
     }
 
     /**
@@ -519,7 +520,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     public String toString() {
 
         StringBuilder s = new StringBuilder();
-        boolean hasNext = false;
+        boolean hasNext = true;
         Node<T> q = hode;
 
         // (1) Setter klammeparantes i starten av String
