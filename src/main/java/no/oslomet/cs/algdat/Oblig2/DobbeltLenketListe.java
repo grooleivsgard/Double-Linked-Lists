@@ -4,6 +4,7 @@ package no.oslomet.cs.algdat.Oblig2;
 ////////////////// class DobbeltLenketListe //////////////////////////////
 
 
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Objects;
@@ -63,6 +64,12 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         */
 
         /// Oppgave 5 /////////////////////////////////////////////////////
+
+        Character [] ch = {'A', 'C', 'E'};
+        DobbeltLenketListe<Character> liste5 = new DobbeltLenketListe<>(ch);
+        System.out.println(liste5.toString());
+        liste5.leggInn(2, 'B');
+        System.out.println(liste5.toString());
     }
     /**
      * Node class
@@ -273,25 +280,28 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
         indeksKontroll(indeks, false);
 
-        Node<T> nyNode = finnNode(indeks);
+        Node<T> gammelNode = finnNode(indeks);
+        Node<T> gammelNode1 = gammelNode;
+        // Node<T> nyNode = finnNode(indeks);
 
         if (indeks == 0) {
-            hode = nyNode;
-            nyNode.forrige = null;
+            hode = gammelNode;
+            gammelNode1.forrige = null;
 
             if (antall == 0) {
                 hode = hale;
                 hale.neste = null;
             } else {
-                hode.neste = nyNode.neste;
+                hode.neste = gammelNode1.neste;
             }
         } else if (indeks == antall){
-            hale = nyNode;
-            nyNode.neste = null;
+            hale = gammelNode1;
+            gammelNode1.neste = null;
         } else {
-            Node<T> q = nyNode.forrige;
+            Node<T> q = gammelNode1.forrige;
 
         }
+        endringer++;
         antall ++;
     }
 
@@ -428,7 +438,38 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public void nullstill() {
-        throw new UnsupportedOperationException();
+    // throw new UnsupportedOperationException();
+        Node<T> slett = hode;
+
+        //Første måte:
+        while (slett != null) {
+            hode = slett.neste;
+            System.out.println("slett : " + hode.forrige.verdi);
+            hode.forrige = null;
+            slett = hode;
+            if (hode == hale) {
+                hale.forrige = null;
+                System.out.println("slett : " + hale.verdi);
+                hode = null;
+                hale = null;
+                antall = 0;
+                endringer++;
+                break;
+            }
+            antall--;
+            endringer++;
+            System.out.println("Antall: " + antall + "Endringer : " + endringer);
+        }
+
+        //Andre måte:
+        for(int i = 0; i < antall; i++){
+            hode = hode.neste;
+            fjern(i);
+            if(hode == hale){
+                fjern(i);
+                break;
+            }
+        }
     }
 
     /**
